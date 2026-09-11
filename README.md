@@ -1,6 +1,6 @@
 # Hany · Dein Geld. Deine Richtung.
 
-Version 0.4.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
+Version 0.5.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
 
 ## Auf GitHub aktualisieren
 
@@ -11,7 +11,7 @@ Version 0.4.0 – eigenständige Webseite, optimiert fürs Handy und als PWA ins
 
 GitHub Pages kann für öffentliche Repositories mit GitHub Free verwendet werden. Anleitung und Voraussetzungen: [GitHub Pages – Veröffentlichungsquelle](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) und [GitHub – eigene Pages-Workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-Wenn dein bestehendes Repository bereits Netlify aktualisiert, kannst du diesen Inhalt stattdessen in dessen bisherigen Veröffentlichungsordner übernehmen und die bisherige Website-Adresse beibehalten. Du musst nicht zu GitHub Pages wechseln. Dieses Paket wurde lokal vorbereitet; es ist noch nicht in dein Repository hochgeladen.
+Wenn dein Repository bereits Netlify aktualisiert, kannst du die bisherige Website-Adresse beibehalten. Ein neuer Commit auf `main` kann dort automatisch veröffentlicht werden.
 
 ## Vorhandene Daten behalten
 
@@ -29,7 +29,7 @@ Erinnerungen für eine geschlossene Web-App funktionieren über **Einstellungen 
 
 - Beliebig viele Bankkonten, Kartenkonten und Bargeldquellen. Abhebungen, Einzahlungen und eigene Überweisungen werden als Umbuchung behandelt: Gesamtguthaben und Statistik bleiben unverändert.
 - Bargeld-Einnahmen, Ausgaben und Suche nach Notiz, Kategorie, Datum, Betrag oder Konto.
-- Schulden und Forderungen, getrennt nach Privatpersonen und Unternehmen, mit verbuchten Rückzahlungen. Bei privat geliehenem Geld kann der Betrag gleichzeitig einem gewählten Konto gutgeschrieben werden; die Schuld bleibt vollständig offen und der Eingang zählt nicht als Verdienst.
+- Schulden und Forderungen, getrennt nach Privatpersonen und Unternehmen, mit verbuchten Rückzahlungen. Bestehende Einträge können um weitere Beträge erhöht werden; zusätzlich geliehenes Privatgeld kann dabei einem Konto gutgeschrieben werden. Vollständig bezahlte Einträge lassen sich archivieren und später wiederherstellen.
 - „Unterwegs“ für Tage und Abende: Bar- und Kartenbudgets pro Konto vormerken, am Ende den Bargeldrest und die Kartenausgaben eintragen und pro Geldquelle eine Sammelbuchung erzeugen. Bereits einzeln erfasste Ausgaben können angerechnet werden. Fertige Abrechnungen lassen sich kontrolliert korrigieren.
 - Wiederkehrende Zahlungen und Abos: tägliche bis jährliche Zyklen, bezahlt, übersprungen, überfällig und manuell erfasste Mahngebühren.
 - Statistik mit Zeitraum-, Konto- und Kategorieansichten; Monatsbudgets mit echten gebuchten Ausgaben; 30-Tage-Geldvorschau mit Tagesdetails und niedrigstem Stand.

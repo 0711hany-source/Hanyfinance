@@ -1,5 +1,5 @@
 // Bump the release whenever the app shell changes. User data is never cached here.
-const RELEASE = '0.4.0-web';
+const RELEASE = '0.5.0-web';
 const PREFIX = 'hany-app-shell-';
 const CACHE = PREFIX + RELEASE;
 const ASSETS = [

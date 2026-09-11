@@ -10,9 +10,23 @@ export const accountBalance=(s,key)=>account(s,key).opening+s.transactions.filte
 export function createDebt(s,debt,funding){
   if(!debt.name.trim()||!money(debt.amount)||!debt.amount)throw Error('Name und positiven Betrag eingeben.');
   if(funding&&(!account(s,funding.account)||!validDate(funding.date)||debt.direction!=='owe'||debt.kind!=='person'))throw Error('Geldeingang ist nur für geliehenes Geld von Privatpersonen möglich.');
-  const d={...debt,id:uid()};s.debts.push(d);
+  const d={...debt,id:uid(),archived:false};s.debts.push(d);
   if(funding)s.transactions.unshift({id:uid(),type:'income',amount:d.amount,account:funding.account,date:funding.date,category:'Geliehenes Geld',note:'Geliehen von '+d.name,loanFunding:d.id});
   return d;
+}
+export function increaseDebt(s,key,amount,funding){
+  const d=s.debts.find(d=>d.id===key);
+  if(!d||d.archived||!money(amount)||!amount)throw Error('Schuld und positiven Zusatzbetrag prüfen.');
+  if(funding&&(!account(s,funding.account)||!validDate(funding.date)||d.direction!=='owe'||d.kind!=='person'))throw Error('Eine Gutschrift ist nur bei geliehenem Geld von Privatpersonen möglich.');
+  d.amount+=amount;
+  if(funding)s.transactions.unshift({id:uid(),type:'income',amount,account:funding.account,date:funding.date,category:'Geliehenes Geld',note:'Zusätzlich geliehen von '+d.name,loanFunding:d.id});
+  return d;
+}
+export function setDebtArchived(s,key,archived){
+  const d=s.debts.find(d=>d.id===key);
+  if(!d)throw Error('Schuld nicht gefunden.');
+  if(archived&&s.transactions.filter(t=>t.debt===d.id).reduce((n,t)=>n+t.amount,0)!==d.amount)throw Error('Nur vollständig bezahlte Einträge können archiviert werden.');
+  d.archived=archived;
 }
 export function transferMoney(s,{from,to,amount,date,note=''}){
   if(!account(s,from)||!account(s,to)||from===to||!money(amount)||!amount||!validDate(date))throw Error('Zwei unterschiedliche Konten, Betrag und Datum prüfen.');
@@ -33,11 +47,12 @@ export function previewSettlement(s,o,{date,lines}){
 }
 export function settleOuting(s,key,input){const o=s.outings.find(o=>o.id===key),rows=previewSettlement(s,o,input);const tx=rows.filter(l=>l.unbooked>0).map(l=>({id:uid(),outing:key,type:'expense',account:l.account,amount:l.unbooked,date:input.date,category:o.category,note:o.name+' · Sammelbuchung'}));o.status='closed';o.settled=input.date;o.lines=rows.map(({recorded,unbooked,...l})=>l);s.transactions.unshift(...tx);return rows;}
 export function reopenOuting(s,key){const o=s.outings.find(o=>o.id===key);if(!o||o.status!=='closed')throw Error('Abrechnung nicht gefunden.');if(s.outings.some(x=>x.id!==key&&x.status==='open'&&x.lines.some(l=>o.lines.some(r=>r.account===l.account))))throw Error('Für eines dieser Konten ist ein weiterer Abend offen. Diesen zuerst abschließen.');s.transactions=s.transactions.filter(t=>t.outing!==key);o.status='open';o.settled='';o.lines=o.lines.map(({account,mode,budget})=>({account,mode,budget}));}
-export function removeTransaction(s,key){const t=s.transactions.find(t=>t.id===key);if(!t)return;const outing=s.outings.find(o=>o.id===t.outing||o.status==='closed'&&o.lines.some(l=>l.recordedIds.includes(key)));if(outing)throw Error('Diese Buchung gehört zu einem abgerechneten Abend. Öffne zuerst dessen Abrechnung zur Korrektur.');s.transactions=s.transactions.filter(x=>t.transfer?x.transfer!==t.transfer:x.id!==key);}
+export function removeTransaction(s,key){const t=s.transactions.find(t=>t.id===key);if(!t)return;const outing=s.outings.find(o=>o.id===t.outing||o.status==='closed'&&o.lines.some(l=>l.recordedIds.includes(key)));if(outing)throw Error('Diese Buchung gehört zu einem abgerechneten Abend. Öffne zuerst dessen Abrechnung zur Korrektur.');if(t.debt){const d=s.debts.find(d=>d.id===t.debt);if(d)d.archived=false;}s.transactions=s.transactions.filter(x=>t.transfer?x.transfer!==t.transfer:x.id!==key);}
 export function validateMoneyFlows(s,fail){
   if(!s.accounts.every(a=>['cash','bank'].includes(a.kind))||!Array.isArray(s.outings)||!s.outings.every(o=>o&&id(o.id))||new Set(s.outings.map(o=>o.id)).size!==s.outings.length)return fail();
-  const funded=new Set(),transfers=new Map(),linked=new Set(),active=new Set();
-  for(const t of s.transactions){if([t.loanFunding,t.transfer,t.outing,t.debt,t.schedule].filter(Boolean).length>1)return fail();if(t.loanFunding){const d=s.debts.find(d=>d.id===t.loanFunding);if(!d||d.kind!=='person'||d.direction!=='owe'||t.type!=='income'||t.amount!==d.amount||funded.has(d.id))return fail();funded.add(d.id);}if(t.transfer){if(!id(t.transfer))return fail();const rows=transfers.get(t.transfer)||[];rows.push(t);transfers.set(t.transfer,rows);}if(t.outing&&!s.outings.some(o=>o.id===t.outing&&o.status==='closed'&&o.lines.some(l=>l.account===t.account)))return fail();}
+  const funded=new Map(),transfers=new Map(),linked=new Set(),active=new Set();
+  for(const t of s.transactions){if([t.loanFunding,t.transfer,t.outing,t.debt,t.schedule].filter(Boolean).length>1)return fail();if(t.loanFunding){const d=s.debts.find(d=>d.id===t.loanFunding);if(!d||d.kind!=='person'||d.direction!=='owe'||t.type!=='income')return fail();funded.set(d.id,(funded.get(d.id)||0)+t.amount);}if(t.transfer){if(!id(t.transfer))return fail();const rows=transfers.get(t.transfer)||[];rows.push(t);transfers.set(t.transfer,rows);}if(t.outing&&!s.outings.some(o=>o.id===t.outing&&o.status==='closed'&&o.lines.some(l=>l.account===t.account)))return fail();}
+  for(const [key,total] of funded){const d=s.debts.find(d=>d.id===key);if(total>d.amount)return fail();}
   for(const rows of transfers.values())if(rows.length!==2||rows[0].type===rows[1].type||rows[0].account===rows[1].account||rows[0].amount!==rows[1].amount||rows[0].date!==rows[1].date)return fail();
   for(const o of s.outings){if(!text(o.name)||!o.name.trim()||!text(o.category)||!o.category.trim()||!validDate(o.date)||!['open','closed'].includes(o.status)||!Array.isArray(o.lines)||!o.lines.length||new Set(o.lines.map(l=>l.account)).size!==o.lines.length)return fail();if(o.status==='open'?o.settled!=='':!validDate(o.settled)||o.settled<o.date)return fail();for(const l of o.lines){if(!account(s,l.account)||!['cash','bank'].includes(l.mode)||!money(l.budget)||!l.budget)return fail();if(o.status==='open'){if(active.has(l.account))return fail();active.add(l.account);continue;}if(!money(l.spent)||!money(l.added)||!money(l.returned)||!Array.isArray(l.recordedIds)||new Set(l.recordedIds).size!==l.recordedIds.length||l.mode==='cash'&&l.spent!==l.budget+l.added-l.returned||l.mode==='bank'&&(l.added!==0||l.returned!==0))return fail();let recorded=0;for(const key of l.recordedIds){const t=s.transactions.find(t=>t.id===key);if(!t||linked.has(key)||t.type!=='expense'||!isOperating(t)||t.outing||t.account!==l.account||t.date<o.date||t.date>o.settled)return fail();linked.add(key);recorded+=t.amount;}const generated=s.transactions.filter(t=>t.outing===o.id&&t.account===l.account),left=l.spent-recorded;if(left<0||generated.length!==(left>0?1:0)||generated.some(t=>t.type!=='expense'||t.amount!==left||t.date!==o.settled))return fail();}}
 }

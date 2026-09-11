@@ -11,7 +11,7 @@ export function reminderItems(state,{asOf=todayLocal(),days=30,includeOverdue=tr
   const through=addDays(asOf,days),from=includeOverdue?'1900-01-01':asOf,items=[];
   if (settings.includeGoals) for (const goal of state.goals) if (!goal.done && validDate(goal.due) && goal.due>=from && goal.due<=through) items.push({id:`goal-${goal.id}`,kind:'goal',source:goal.id,due:goal.due,title:goal.title,description:goal.nextAction||goal.ifThen||'',amount:null});
   if (settings.includePayments) for (const item of occurrences(state,through,asOf,from)) if (!['paid','skipped'].includes(item.status)) items.push({id:`payment-${item.schedule}-${item.due}`,kind:'payment',source:item.schedule,due:item.due,title:item.name,description:item.type==='income'?'Erwarteter Eingang':'Geplante Zahlung',amount:item.amount});
-  if (settings.includeDebts) for (const debt of state.debts) {
+  if (settings.includeDebts) for (const debt of state.debts.filter(debt=>!debt.archived)) {
     const amount=Math.max(0,debt.amount-state.transactions.filter(tx=>tx.debt===debt.id).reduce((sum,tx)=>sum+tx.amount,0));
     if (amount>0 && validDate(debt.due) && debt.due>=from && debt.due<=through) items.push({id:`debt-${debt.id}`,kind:'debt',source:debt.id,due:debt.due,title:debt.name,description:debt.direction==='owe'?'Offene Schuld':'Offene Forderung',amount});
   }
@@ -32,7 +32,7 @@ const money = cents => new Intl.NumberFormat('de-DE',{style:'currency',currency:
 export function calendarICS(items,{settings=reminderDefaults(),now=new Date()}={}) {
   if (!validReminderSettings(settings)) throw Error('Erinnerungseinstellungen prüfen.');
   const stamp=now.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hany//Erinnerungen 0.4.0//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Hany Erinnerungen'];
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hany//Erinnerungen 0.5.0//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Hany Erinnerungen'];
   for (const item of items) {
     if (!validDate(item.due)) throw Error('Ungültiges Fälligkeitsdatum.');
     const title=settings.privateTitles?`Hany · ${friendly[item.kind]||'Termin prüfen'}`:`Hany · ${item.title}`;

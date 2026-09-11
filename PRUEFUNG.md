@@ -1,6 +1,6 @@
-# Hany Web 0.4.0 – Prüfung am 11.09.2026
+# Hany Web 0.5.0 – Prüfung am 11.09.2026
 
-59 automatisierte Tests erfolgreich: Cent-Berechnung, beliebig viele Konten, Darlehensgutschriften, paarweise Umbuchungen, gemischte Unterwegs-Abrechnungen, Schutz vor Doppelbuchungen, Schulden, Zahlungszyklen und Gebühren, Statistik, Zielvorlagen, Sparverlauf, Glaubenssätze, Sicherungen, CSV-Fehler/Duplikate, Budgets, Suche, Geldvorschau, Kalender und Offline-Paket.
+60 automatisierte Tests erfolgreich: Cent-Berechnung, beliebig viele Konten, zusätzliche Darlehensbeträge, bezahltes Schuldenarchiv, Darlehensgutschriften, paarweise Umbuchungen, gemischte Unterwegs-Abrechnungen, Schutz vor Doppelbuchungen, Zahlungszyklen und Gebühren, Statistik, Zielvorlagen, Sparverlauf, Glaubenssätze, Sicherungen, CSV-Fehler/Duplikate, Budgets, Suche, Geldvorschau, Kalender und Offline-Paket.
 
 Im Browser mit getrennten Testdaten geprüft:
 
