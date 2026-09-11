@@ -1,5 +1,5 @@
 // Bump the release whenever the app shell changes. User data is never cached here.
-const RELEASE = '0.3.0-web';
+const RELEASE = '0.4.0-web';
 const PREFIX = 'hany-app-shell-';
 const CACHE = PREFIX + RELEASE;
 const ASSETS = [
@@ -7,7 +7,7 @@ const ASSETS = [
   './finance-ui.js', './manifest.webmanifest', './icon.svg', './icon-192.png',
   './icon-512.png', './apple-touch-icon.png', './pwa.js', './pwa.css',
   './goals.js', './goals-ui.js', './goals.css', './data-tools.js', './data-tools-ui.js', './data-tools.css', './insights.js', './insights-ui.js', './insights.css',
-  './reminders.js', './reminders-ui.js',
+  './money-flows.js', './outings-ui.js', './outings.css', './reminders.js', './reminders-ui.js',
 ];
 const url = path => new URL(path, self.registration.scope).href;
 const shell = new Set(ASSETS.map(url));

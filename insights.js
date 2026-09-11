@@ -2,7 +2,7 @@ import {occurrences,addDays} from './planning.js';
 import {balance} from './model.js';
 
 export function budgetSummary(state,month){
-  return state.budgets.map(b=>{const tx=state.transactions.filter(t=>t.type==='expense'&&t.date.startsWith(month)&&t.category===b.category);const spent=tx.reduce((n,t)=>n+t.amount,0);return {...b,spent,left:b.amount-spent,percent:Math.round(spent/b.amount*100),tx};});
+  return state.budgets.map(b=>{const tx=state.transactions.filter(t=>!t.transfer&&t.type==='expense'&&t.date.startsWith(month)&&t.category===b.category);const spent=tx.reduce((n,t)=>n+t.amount,0);return {...b,spent,left:b.amount-spent,percent:Math.round(spent/b.amount*100),tx};});
 }
 
 export function forecast(state,asOf,days=30,account='all'){

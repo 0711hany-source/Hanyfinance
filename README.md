@@ -1,6 +1,6 @@
 # Hany · Dein Geld. Deine Richtung.
 
-Version 0.3.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
+Version 0.4.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
 
 ## Auf GitHub aktualisieren
 
@@ -15,7 +15,7 @@ Wenn dein bestehendes Repository bereits Netlify aktualisiert, kannst du diesen 
 
 ## Vorhandene Daten behalten
 
-Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 und 2 werden beim Laden übernommen. Die aktuelle Datenversion ist 3. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
+Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 bis 3 werden beim Laden übernommen. Die aktuelle Datenversion ist 4. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
 
 **Vor einem Wechsel der Website-Adresse eine Sicherung erstellen.** Netlify, GitHub Pages und lokale Vorschauen haben getrennte Browserspeicher. Eine neue Adresse übernimmt deine Daten deshalb nicht automatisch. Auf der alten Adresse sichern, auf der neuen in **Einstellungen → Sicherung wiederherstellen** importieren. Das gilt auch bei einem Gerätewechsel. Die verschlüsselte Sicherung schützt die exportierte Datei; sie verschlüsselt nicht den lokalen Browserspeicher.
 
@@ -27,8 +27,10 @@ Erinnerungen für eine geschlossene Web-App funktionieren über **Einstellungen 
 
 ## Enthaltene Funktionen
 
-- Bargeld-Einnahmen, Ausgaben, Konten und Suche nach Notiz, Kategorie, Datum, Betrag oder Konto.
-- Schulden und Forderungen, getrennt nach Privatpersonen und Unternehmen, mit verbuchten Rückzahlungen.
+- Beliebig viele Bankkonten, Kartenkonten und Bargeldquellen. Abhebungen, Einzahlungen und eigene Überweisungen werden als Umbuchung behandelt: Gesamtguthaben und Statistik bleiben unverändert.
+- Bargeld-Einnahmen, Ausgaben und Suche nach Notiz, Kategorie, Datum, Betrag oder Konto.
+- Schulden und Forderungen, getrennt nach Privatpersonen und Unternehmen, mit verbuchten Rückzahlungen. Bei privat geliehenem Geld kann der Betrag gleichzeitig einem gewählten Konto gutgeschrieben werden; die Schuld bleibt vollständig offen und der Eingang zählt nicht als Verdienst.
+- „Unterwegs“ für Tage und Abende: Bar- und Kartenbudgets pro Konto vormerken, am Ende den Bargeldrest und die Kartenausgaben eintragen und pro Geldquelle eine Sammelbuchung erzeugen. Bereits einzeln erfasste Ausgaben können angerechnet werden. Fertige Abrechnungen lassen sich kontrolliert korrigieren.
 - Wiederkehrende Zahlungen und Abos: tägliche bis jährliche Zyklen, bezahlt, übersprungen, überfällig und manuell erfasste Mahngebühren.
 - Statistik mit Zeitraum-, Konto- und Kategorieansichten; Monatsbudgets mit echten gebuchten Ausgaben; 30-Tage-Geldvorschau mit Tagesdetails und niedrigstem Stand.
 - Ziele für Tag, Woche, Monat, Jahr und Langzeit; Vorlagen für Zimmer, Sparziel, Auto und Haus. Eigene Fristen, Etappen, nächste Handlung und Wenn-dann-Plan.
@@ -43,4 +45,4 @@ Node.js ab Version 22 installieren. Im Ordner `npm start` ausführen und `http:/
 
 Nach Änderungen an Webdateien die Release-Kennung in `sw.js` erhöhen. Die `ASSETS`-Liste muss alle für die Offline-App benötigten Module und Styles enthalten. Bei einer sichtbaren Versionsänderung auch `pwa.js` und `package.json` anpassen. Für eine reine Web-Veröffentlichung `node scripts/prepare-pages.mjs` ausführen; `_site` enthält ausschließlich Website-Dateien.
 
-Echte Bankanbindung, Cloud-Synchronisierung, Hintergrund-Web-Push und biometrische App-Sperre sind nicht enthalten. Sparraten und Geldvorschau beruhen auf deinen Einträgen. Offene Schulden werden nicht zusätzlich in die Vorschau gerechnet; erwartete Eingänge und nicht geplante Alltagsausgaben können vom tatsächlichen Verlauf abweichen.
+Echte Bankanbindung, Cloud-Synchronisierung, Hintergrund-Web-Push und biometrische App-Sperre sind nicht enthalten. Ein Kartenbudget in „Unterwegs“ verändert kein echtes Kartenlimit. Eine Umbuchung oder Darlehensgutschrift dokumentiert nur eine tatsächlich erfolgte Geldbewegung. Sparraten und Geldvorschau beruhen auf deinen Einträgen. Offene Schulden werden nicht zusätzlich in die Vorschau gerechnet; erwartete Eingänge und nicht geplante Alltagsausgaben können vom tatsächlichen Verlauf abweichen.

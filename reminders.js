@@ -32,7 +32,7 @@ const money = cents => new Intl.NumberFormat('de-DE',{style:'currency',currency:
 export function calendarICS(items,{settings=reminderDefaults(),now=new Date()}={}) {
   if (!validReminderSettings(settings)) throw Error('Erinnerungseinstellungen prüfen.');
   const stamp=now.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hany//Erinnerungen 0.3.0//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Hany Erinnerungen'];
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hany//Erinnerungen 0.4.0//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Hany Erinnerungen'];
   for (const item of items) {
     if (!validDate(item.due)) throw Error('Ungültiges Fälligkeitsdatum.');
     const title=settings.privateTitles?`Hany · ${friendly[item.kind]||'Termin prüfen'}`:`Hany · ${item.title}`;

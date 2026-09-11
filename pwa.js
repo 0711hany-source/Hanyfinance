@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.3.0';
+export const APP_VERSION = '0.4.0';
 export function initPwa({openSheet, toast}) {
   let registration, installPrompt, applying = false, unavailable = false;
   const banner = document.createElement('div');

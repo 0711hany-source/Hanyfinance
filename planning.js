@@ -51,7 +51,7 @@ export function setOccurrence(state,id,due,patch) {
   Object.assign(o,patch);return o;
 }
 export function statistics(state,from,to,account='all') {
-  const tx=state.transactions.filter(t=>t.date>=from&&t.date<=to&&(account==='all'||t.account===account));
+  const tx=state.transactions.filter(t=>!t.transfer&&!t.loanFunding&&t.date>=from&&t.date<=to&&(account==='all'||t.account===account));
   const income=tx.filter(t=>t.type==='income').reduce((n,t)=>n+t.amount,0),expense=tx.filter(t=>t.type==='expense').reduce((n,t)=>n+t.amount,0);
   const cats={};for(const t of tx.filter(t=>t.type==='expense'))cats[t.category]=(cats[t.category]||0)+t.amount;
   return {tx,income,expense,net:income-expense,rate:income>0?(income-expense)/income*100:null,categories:Object.entries(cats).sort((a,b)=>b[1]-a[1])};
