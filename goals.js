@@ -1,3 +1,4 @@
+import {accountBalance} from './money-flows.js';
 import {validDate, addDays, daysBetween, dueAt} from './planning.js';
 
 export const horizons = ['Tag', 'Woche', 'Monat', 'Jahr', 'Langzeit'];
@@ -64,7 +65,7 @@ export function addGoalProgress(g, entry, asOf) {
 
 export function dailyPractice(s, date) {
   let record = s.practice.find(p => p.date === date);
-  if (!record) {record = {date, readIds:[], goalId:'', action:'', note:'', confidence:null}; s.practice.push(record);}
+  if (!record) {record = {date, readIds:[], goalId:'', action:'', note:'', confidence:null,actionStatus:'planned'}; s.practice.push(record);}
   return record;
 }
 
@@ -73,6 +74,7 @@ export function markBeliefsRead(s, ids, date) {
   if (!ids.length) return null;
   const record = dailyPractice(s, date);
   record.readIds = [...new Set([...record.readIds, ...ids])];
+  record.readTexts??={};for(const id of ids)record.readTexts[id]??=s.beliefs.find(b=>b.id===id).text;
   return record;
 }
 
@@ -101,7 +103,7 @@ export function validateGoalsState(s, fail = () => {throw Error('Ungültige Ziel
   if (!s || !unique(s.goals) || !unique(s.beliefs) || !Array.isArray(s.practice) || !Array.isArray(s.reviews) || s.practice.length > 50000 || s.reviews.length > 10000) return fail();
   for (const g of s.goals) {
     if (![g.title,g.motivation,g.nextAction,g.obstacle,g.ifThen].every(text) || !horizons.includes(g.horizon) || !['task','savings'].includes(g.kind) || !money(g.targetCents) || g.targetCents < 0 || (g.kind === 'savings' && !g.targetCents) || (g.kind === 'task' && g.targetCents !== 0) || typeof g.done !== 'boolean' || typeof g.pinned !== 'boolean' || !dateOrEmpty(g.created) || !dateOrEmpty(g.due) || !(g.done ? validDate(g.completed) : g.completed === '') || !validProgress(g.progress) || (g.kind === 'task' && g.progress.length) || !unique(g.milestones)) return fail();
-    if (g.done && g.kind === 'savings' && goalSaved(g) < g.targetCents) return fail();
+    if (g.done && g.kind === 'savings' && (g.linkedAccount?accountBalance(s,g.linkedAccount):goalSaved(g)) < g.targetCents) return fail();
     for (const m of g.milestones) if (!text(m.title) || !m.title.trim() || typeof m.done !== 'boolean' || !(m.done ? validDate(m.completed) : m.completed === '')) return fail();
   }
   const linkedGoal = v => v === '' || id(v) && s.goals.some(g => g.id === v);

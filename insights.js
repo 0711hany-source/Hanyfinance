@@ -9,8 +9,8 @@ export function forecast(state,asOf,days=30,account='all'){
   const opening=state.accounts.filter(a=>account==='all'||a.id===account).reduce((n,a)=>n+balance(state,a.id),0);
   const pending=occurrences(state,addDays(asOf,days-1),asOf).filter(o=>!['paid','skipped'].includes(o.status)&&(account==='all'||o.account===account));
   let current=opening;
-  const rows=Array.from({length:days},(_,i)=>{const date=addDays(asOf,i),items=pending.filter(o=>i===0?o.due<=date:o.due===date),income=items.filter(o=>o.type==='income').reduce((n,o)=>n+o.amount,0),expense=items.filter(o=>o.type==='expense').reduce((n,o)=>n+o.amount,0);current+=income-expense;return {date,items,income,expense,balance:current};});
-  return {opening,rows,closing:current,lowest:Math.min(opening,...rows.map(r=>r.balance)),overdue:pending.filter(o=>o.due<asOf).length};
+  const rows=Array.from({length:days},(_,i)=>{const date=addDays(asOf,i),items=pending.filter(o=>i===0?o.effectiveDue<=date:o.effectiveDue===date),income=items.filter(o=>o.type==='income').reduce((n,o)=>n+o.amount,0),expense=items.filter(o=>o.type==='expense').reduce((n,o)=>n+o.amount,0);current+=income-expense;return {date,items,income,expense,balance:current};});
+  return {opening,rows,closing:current,lowest:Math.min(opening,...rows.map(r=>r.balance)),overdue:pending.filter(o=>o.effectiveDue<asOf).length};
 }
 
 export function searchTransactions(state,query='',account='all'){

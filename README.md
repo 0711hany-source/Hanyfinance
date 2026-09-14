@@ -1,6 +1,6 @@
 # Hany · Dein Geld. Deine Richtung.
 
-Version 0.5.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
+Version 0.6.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
 
 ## Auf GitHub aktualisieren
 
@@ -15,7 +15,7 @@ Wenn dein Repository bereits Netlify aktualisiert, kannst du die bisherige Websi
 
 ## Vorhandene Daten behalten
 
-Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 bis 3 werden beim Laden übernommen. Die aktuelle Datenversion ist 4. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
+Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 bis 4 werden beim Laden übernommen. Die aktuelle Datenversion ist 5. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
 
 **Vor einem Wechsel der Website-Adresse eine Sicherung erstellen.** Netlify, GitHub Pages und lokale Vorschauen haben getrennte Browserspeicher. Eine neue Adresse übernimmt deine Daten deshalb nicht automatisch. Auf der alten Adresse sichern, auf der neuen in **Einstellungen → Sicherung wiederherstellen** importieren. Das gilt auch bei einem Gerätewechsel. Die verschlüsselte Sicherung schützt die exportierte Datei; sie verschlüsselt nicht den lokalen Browserspeicher.
 
@@ -24,6 +24,22 @@ Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisheri
 Website in Safari öffnen → Teilen → Zum Home-Bildschirm. Nach dem ersten vollständigen Laden ist die Webseite offline verfügbar. Updates werden oben angekündigt und erst nach bewusstem Antippen geladen; ein offenes Formular muss vorher gespeichert oder geschlossen werden. Die persönliche Web-App enthält keinen Login und synchronisiert nicht zwischen Geräten.
 
 Erinnerungen für eine geschlossene Web-App funktionieren über **Einstellungen → Erinnerungen & Kalender**. Die ICS-Datei enthält offene Termine der nächsten 90 Tage. In einen eigenen Hany-Kalender importieren und dessen Mitteilungen aktivieren. Es ist eine Momentaufnahme, keine laufende Synchronisierung. Bereits importierte Termine ändern sich nicht bei Änderungen in Hany. Namen und Beträge sind standardmäßig im Export verborgen.
+
+## Neu in Hany 0.6
+
+- Geführter Gedanken-Assistent mit persönlichen Werten, Situationen, bisherigen Gedanken, Erfahrungen, glaubwürdigen Sätzen und konkreten nächsten Handlungen.
+- Freiwillige Glaubwürdigkeitsbewertung von 0 bis 10, Satzänderungsverlauf und bewahrte gelesene Formulierungen ab diesem Update.
+- Morgen- und Abendblick mit getrennten Lesetagen und umgesetzten Handlungstagen; hilfreiche Anpassungen bei Rückschlägen.
+- Quellen und Grenzen der wissenschaftlichen Grundlage direkt im Fokus-Bereich.
+- Freier Monatsbetrag mit nachvollziehbaren Reservierungen, Kategorieüberlappungen und persönlichem Puffer. Erwartete Eingänge werden nicht vorab als verfügbar gezählt.
+- Teilzahlungen, abweichende Fälligkeit und Terminbeträge sowie Zuordnung vorhandener Umsätze ohne erneute Kontobewegung.
+- Lokale bestätigte Kategorieregeln, mögliche Abo-Vorschläge, eigene Kategorien und Favoriten.
+- Normale Buchungen bearbeiten, als Vorlage duplizieren und auf Kategorien aufteilen; Plus-/Minus-Rechnungen im Schnellbuchungsformular.
+- Schuldenereignisse für neue Aufnahmen und Erhöhungen, Monatsrate, Sonderzahlungs-Simulation und CSV-Verlaufsexport.
+- Sparkonto als alternative Zielansicht, vorsichtige Tempo-Prognose aus dokumentiertem Sparverlauf und Finanzierungslücken-Hinweis.
+- Globale Suche, einstellbare erste Startkarte, Wochenabschluss und Rückgängig nach Änderungen.
+
+Alle Funktionen arbeiten lokal und benötigen keine kostenpflichtigen Dienste. Bereits vorhandene Lesetage werden nicht nachträglich als umgesetzte Handlungen markiert. Ältere Schulden werden mit ihrem Gesamtbetrag übernommen; unbekannte Aufnahmedaten und frühere Erhöhungen werden nicht erfunden.
 
 ## Enthaltene Funktionen
 

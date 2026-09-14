@@ -3,7 +3,7 @@ export function remindersUI(c) {
   const {esc,eur,input,select,form,openSheet,toast}=c;
   const date = value => new Date(value+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'short',year:'numeric'});
   let visible=30;
-  const sourceAttrs = item => item.kind==='goal'?`data-goal-detail="${esc(item.source)}"`:item.kind==='payment'?`data-plan-detail="${esc(item.source)}" data-due="${item.due}"`:`data-debt-detail="${esc(item.source)}"`;
+  const sourceAttrs = item => item.kind==='goal'?`data-goal-detail="${esc(item.source)}"`:item.kind==='payment'?`data-plan-detail="${esc(item.source)}" data-due="${item.originalDue||item.due}"`:`data-debt-detail="${esc(item.source)}"`;
   const status = item => item.late?`Seit ${item.late} ${item.late===1?'Tag':'Tagen'} fällig`:date(item.due);
   function summary() {
     const settings=reminderSettings(c.state()),items=reminderItems(c.state(),{days:settings.leadDays}),late=items.filter(x=>x.late).length;

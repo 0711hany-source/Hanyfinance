@@ -10,7 +10,7 @@ export const accountBalance=(s,key)=>account(s,key).opening+s.transactions.filte
 export function createDebt(s,debt,funding){
   if(!debt.name.trim()||!money(debt.amount)||!debt.amount)throw Error('Name und positiven Betrag eingeben.');
   if(funding&&(!account(s,funding.account)||!validDate(funding.date)||debt.direction!=='owe'||debt.kind!=='person'))throw Error('Geldeingang ist nur für geliehenes Geld von Privatpersonen möglich.');
-  const d={...debt,id:uid(),archived:false};s.debts.push(d);
+  const d={...debt,id:uid(),archived:false,monthlyRate:0,events:[{id:uid(),amount:debt.amount,date:funding?.date||'',note:'Erster Betrag'}]};s.debts.push(d);
   if(funding)s.transactions.unshift({id:uid(),type:'income',amount:d.amount,account:funding.account,date:funding.date,category:'Geliehenes Geld',note:'Geliehen von '+d.name,loanFunding:d.id});
   return d;
 }
@@ -19,6 +19,8 @@ export function increaseDebt(s,key,amount,funding){
   if(!d||d.archived||!money(amount)||!amount)throw Error('Schuld und positiven Zusatzbetrag prüfen.');
   if(funding&&(!account(s,funding.account)||!validDate(funding.date)||d.direction!=='owe'||d.kind!=='person'))throw Error('Eine Gutschrift ist nur bei geliehenem Geld von Privatpersonen möglich.');
   d.amount+=amount;
+  d.events??=[{id:uid(),amount:d.amount-amount,date:'',note:'Übernommener Gesamtbetrag'}];
+  d.events.push({id:uid(),amount,date:funding?.date||new Date().toLocaleDateString('sv-SE'),note:'Betrag erhöht'});
   if(funding)s.transactions.unshift({id:uid(),type:'income',amount,account:funding.account,date:funding.date,category:'Geliehenes Geld',note:'Zusätzlich geliehen von '+d.name,loanFunding:d.id});
   return d;
 }

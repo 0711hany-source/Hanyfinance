@@ -26,29 +26,32 @@ export function isOccurrence(s,due) {
 }
 export function occurrence(state,s,due,asOf) {
   const override=state.occurrences.find(o=>o.schedule===s.id&&o.due===due);
-  const tx=state.transactions.find(t=>t.schedule===s.id&&t.due===due);
-  const fee=override?.fee||0;
-  return {schedule:s.id,due,name:s.name,type:s.type,account:s.account,category:s.category,amount:tx?.amount??s.amount+fee,fee,tx,
-    status:tx?'paid':override?.skipped?'skipped':due<asOf?'overdue':due===asOf?'due':'planned',late:Math.max(0,daysBetween(due,asOf)),note:override?.note||''};
+  const txs=state.transactions.filter(t=>t.schedule===s.id&&t.due===due),tx=txs[0];
+  const fee=override?.fee||0,total=tx?.scheduleTotal??override?.amount??s.amount+fee,paidAmount=txs.reduce((n,t)=>n+t.amount,0),remaining=Math.max(0,total-paidAmount),effectiveDue=override?.effectiveDue||due;
+  return {schedule:s.id,due,name:s.name,type:s.type,account:s.account,category:s.category,amount:remaining===0?total:remaining,total,paidAmount,remaining,effectiveDue,fee,tx:remaining===0?tx:null,txs,
+    status:remaining===0?'paid':override?.skipped?'skipped':effectiveDue<asOf?'overdue':paidAmount?'partial':effectiveDue===asOf?'due':'planned',late:Math.max(0,daysBetween(effectiveDue,asOf)),note:override?.note||''};
 }
 export function occurrences(state,through,asOf,from='1900-01-01') {
   const rows=[];
   for(const s of state.schedules){
     const finish=[through,s.end||through,s.stoppedOn||through].sort()[0];
     // At most ~37k daily occurrences across the accepted 2000–2100 date range.
-    for(let i=0;i<40000;i++) {const due=dueAt(s,i);if(!due||due>finish)break;if(due>=from)rows.push(occurrence(state,s,due,asOf));}
+    for(let i=0;i<40000;i++) {const due=dueAt(s,i);if(!due||due>finish)break;const o=occurrence(state,s,due,asOf);if(o.effectiveDue>=from)rows.push(o);}
     // A paid or explicitly skipped occurrence remains visible after stopping a series.
     const extras=[...state.transactions.filter(t=>t.schedule===s.id),...state.occurrences.filter(o=>o.schedule===s.id)];
-    for(const x of extras)if(x.due>=from&&x.due<=through&&!rows.some(r=>r.schedule===s.id&&r.due===x.due))rows.push(occurrence(state,s,x.due,asOf));
+    for(const x of extras)if(occurrence(state,s,x.due,asOf).effectiveDue>=from&&occurrence(state,s,x.due,asOf).effectiveDue<=through&&!rows.some(r=>r.schedule===s.id&&r.due===x.due))rows.push(occurrence(state,s,x.due,asOf));
   }
-  return rows.sort((a,b)=>a.due.localeCompare(b.due)||a.name.localeCompare(b.name));
+  return rows.filter(o=>o.effectiveDue<=through||['paid','skipped'].includes(o.status)).sort((a,b)=>a.effectiveDue.localeCompare(b.effectiveDue)||a.name.localeCompare(b.name));
 }
 export function setOccurrence(state,id,due,patch) {
   const s=state.schedules.find(s=>s.id===id);if(!s||!isOccurrence(s,due))throw Error('Termin nicht gefunden.');
-  if(state.transactions.some(t=>t.schedule===id&&t.due===due))throw Error('Eine bezahlte Zahlung zuerst im Verlauf rückgängig machen.');
+  const current=occurrence(state,s,due,new Date().toLocaleDateString('sv-SE'));if(current.status==='paid')throw Error('Eine bezahlte Zahlung zuerst rückgängig machen.');
+  if(state.transactions.some(t=>t.schedule===id&&t.due===due)&&patch.skipped)throw Error('Teilzahlungen zuerst rückgängig machen, bevor du überspringst.');
   let o=state.occurrences.find(o=>o.schedule===id&&o.due===due);
   if(!o){o={schedule:id,due,fee:0,skipped:false,note:''};state.occurrences.push(o)}
-  Object.assign(o,patch);return o;
+  if(patch.fee!==undefined&&(current.paidAmount||o.amount!==undefined))patch={...patch,amount:current.total-current.fee+patch.fee};
+  if(patch.amount!==undefined&&patch.amount<current.paidAmount)throw Error('Gesamtbetrag darf bereits gezahlte Beträge nicht unterschreiten.');
+  Object.assign(o,patch);if(patch.amount!==undefined)for(const t of state.transactions.filter(t=>t.schedule===id&&t.due===due))t.scheduleTotal=patch.amount;return o;
 }
 export function statistics(state,from,to,account='all') {
   const tx=state.transactions.filter(t=>!t.transfer&&!t.loanFunding&&t.date>=from&&t.date<=to&&(account==='all'||t.account===account));
