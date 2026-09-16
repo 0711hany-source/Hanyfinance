@@ -83,7 +83,7 @@ export function weeklySummary(s, date) {
   return {start, end,
     goals:s.goals.filter(g => g.done && inWeek(g.completed)).length,
     milestones:s.goals.reduce((n, g) => n + g.milestones.filter(m => m.done && inWeek(m.completed)).length, 0),
-    days:s.practice.filter(p => inWeek(p.date) && (p.readIds.length || p.note || p.action || p.confidence !== null)).length,
+    days:s.practice.filter(p => inWeek(p.date) && (p.readIds.length || p.note || p.action || p.confidence !== null || p.ritual?.affirmationRead || p.ritual?.morningDone || p.ritual?.eveningDone)).length,
     savingsEntries:s.goals.reduce((n, g) => n + g.progress.filter(p => inWeek(p.date)).length, 0)};
 }
 

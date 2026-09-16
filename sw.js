@@ -1,8 +1,9 @@
 // Bump the release whenever the app shell changes. User data is never cached here.
-const RELEASE = '0.6.0-web';
+const RELEASE = '1.0.0-web';
 const PREFIX = 'hany-app-shell-';
 const CACHE = PREFIX + RELEASE;
 const ASSETS = [
+  './rituals.js', './rituals-ui.js', './work.js', './work-ui.js',
   './', './index.html', './style.css', './app.js', './model.js', './planning.js',
   './finance-ui.js', './manifest.webmanifest', './icon.svg', './icon-192.png',
   './icon-512.png', './apple-touch-icon.png', './pwa.js', './pwa.css',

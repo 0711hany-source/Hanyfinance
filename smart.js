@@ -1,3 +1,4 @@
+import {validateRitual} from './rituals.js';
 import {occurrences,addDays,daysBetween,validDate} from './planning.js';
 import {isOperating,accountBalance} from './money-flows.js';
 
@@ -27,7 +28,7 @@ export function validateSmart(s,fail){
   for(const r of x.categories)if(!text(r.name)||!r.name.trim()||typeof r.archived!=='boolean')return fail();
   for(const r of x.favorites)if(!text(r.name)||!text(r.category)||!money(r.amount)||!r.amount||!['income','expense'].includes(r.type)||!s.accounts.some(a=>a.id===r.account))return fail();
   for(const b of s.beliefs){if(!(b.personalValue===undefined||text(b.personalValue))||![b.situation,b.counterEvidence,b.nextAction,b.trigger].every(text)||!(b.credibility===null||Number.isInteger(b.credibility)&&b.credibility>=0&&b.credibility<=10)||!Array.isArray(b.history)||b.history.length>50000)return fail();for(const h of b.history)if(!validDate(h.date)||!text(h.text)||!text(h.evidence)||!(h.credibility===null||Number.isInteger(h.credibility)&&h.credibility>=0&&h.credibility<=10))return fail();}
-  for(const p of s.practice){if(!['planned','done','partial','missed'].includes(p.actionStatus))return fail();if(p.readTexts!==undefined&&(!p.readTexts||typeof p.readTexts!=='object'||Array.isArray(p.readTexts)||Object.entries(p.readTexts).some(([id,v])=>!p.readIds.includes(id)||!text(v))))return fail();}
+  for(const p of s.practice){if(!validateRitual(p.ritual))return fail();if(!['planned','done','partial','missed'].includes(p.actionStatus))return fail();if(p.readTexts!==undefined&&(!p.readTexts||typeof p.readTexts!=='object'||Array.isArray(p.readTexts)||Object.entries(p.readTexts).some(([id,v])=>!p.readIds.includes(id)||!text(v))))return fail();}
   for(const d of s.debts){if(!money(d.monthlyRate)||!unique(d.events)||d.events.reduce((n,e)=>n+e.amount,0)!==d.amount)return fail();for(const e of d.events)if(!money(e.amount)||!e.amount||!(e.date===''||validDate(e.date))||!text(e.note))return fail();}
   for(const g of s.goals)if(g.linkedAccount!==undefined&&!(g.linkedAccount===''||s.accounts.some(a=>a.id===g.linkedAccount)))return fail();
 }

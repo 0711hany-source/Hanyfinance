@@ -1,6 +1,6 @@
 # Hany · Dein Geld. Deine Richtung.
 
-Version 0.6.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
+Version 1.0.0 – eigenständige Webseite, optimiert fürs Handy und als PWA installierbar. Kein Android-/iOS-Build, kein kostenpflichtiger App-Store nötig. Keine Bibliotheken oder npm-Pakete für den Betrieb erforderlich.
 
 ## Auf GitHub aktualisieren
 
@@ -15,7 +15,7 @@ Wenn dein Repository bereits Netlify aktualisiert, kannst du die bisherige Websi
 
 ## Vorhandene Daten behalten
 
-Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 bis 4 werden beim Laden übernommen. Die aktuelle Datenversion ist 5. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
+Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisherigen Schlüssel `klar.v1`. Ältere Hany-/Klar-Sicherungen der Versionen 1 bis 7 werden beim Laden übernommen. Die aktuelle Datenversion ist 8. Es sind keine persönlichen Daten oder Testeinträge in diesem Repository enthalten.
 
 **Vor einem Wechsel der Website-Adresse eine Sicherung erstellen.** Netlify, GitHub Pages und lokale Vorschauen haben getrennte Browserspeicher. Eine neue Adresse übernimmt deine Daten deshalb nicht automatisch. Auf der alten Adresse sichern, auf der neuen in **Einstellungen → Sicherung wiederherstellen** importieren. Das gilt auch bei einem Gerätewechsel. Die verschlüsselte Sicherung schützt die exportierte Datei; sie verschlüsselt nicht den lokalen Browserspeicher.
 
@@ -24,6 +24,40 @@ Die Daten liegen ausschließlich im Browser auf diesem Gerät, unter dem bisheri
 Website in Safari öffnen → Teilen → Zum Home-Bildschirm. Nach dem ersten vollständigen Laden ist die Webseite offline verfügbar. Updates werden oben angekündigt und erst nach bewusstem Antippen geladen; ein offenes Formular muss vorher gespeichert oder geschlossen werden. Die persönliche Web-App enthält keinen Login und synchronisiert nicht zwischen Geräten.
 
 Erinnerungen für eine geschlossene Web-App funktionieren über **Einstellungen → Erinnerungen & Kalender**. Die ICS-Datei enthält offene Termine der nächsten 90 Tage. In einen eigenen Hany-Kalender importieren und dessen Mitteilungen aktivieren. Es ist eine Momentaufnahme, keine laufende Synchronisierung. Bereits importierte Termine ändern sich nicht bei Änderungen in Hany. Namen und Beträge sind standardmäßig im Export verborgen.
+
+## Neu in Hany 1.0
+
+- Arbeitsansicht nach der bisherigen Tabelle: Umsatz, Trinkgeld und Bargeld jeweils als Alt-/Neu-Stand mit automatisch berechnetem Tageswert.
+- Portemonnaie, Bar-Trinkgeld, Privatfahrt/sonstiger Verdienst, Kilometer und Firmenausgaben pro Arbeitstag.
+- Monatswerte für Arbeitszeit, Kilometer, Kosten sowie Verdienst pro Stunde und Kilometer.
+- Wochenübersicht für Umsatz, Verdienst, Trinkgeld, Kilometer und Kosten.
+- Alte Arbeitsdaten werden verlustfrei in die neuen fortlaufenden Monatsstände übernommen.
+
+## Neu in Hany 0.9
+
+- Bargeldanteil je Arbeitsumsatz und automatische Monatsabrechnung: „Du schuldest“ oder „Du bekommst“.
+- Trinkgeld bleibt aus der Chef-Abrechnung heraus und wird vollständig zum berechneten Verdienst addiert.
+- Ausgleiche mit dem Chef als bezahlt oder erhalten dokumentieren; der offene Saldo wird entsprechend reduziert.
+- Eigener Bereich für Einkommensteuer, Umsatzsteuer, Sozialabgaben und sonstige Abzüge.
+- Steuerabzüge optional als verknüpfte Kontorausgabe buchen und gemeinsam wieder entfernen.
+- Berechneter Monatsverdienst vor und nach den eingetragenen Steuerabzügen.
+
+## Neu in Hany 0.8
+
+- Neutraler Arbeitsbereich mit frei benennbaren und archivierbaren Einnahmequellen.
+- Kumulierte Monatsstände: Der neue Stand minus vorherigem Stand ergibt automatisch den Umsatz des neuen Eintrags.
+- Pro Quelle Umsatzbeteiligung, optionaler direkter 19-Prozent-Abzug und Trinkgeld; historische Einträge behalten ihre damalige Regel.
+- Optionales Verbuchen des berechneten Verdiensts auf ein Hany-Konto, mit Schutz vor doppelter Erfassung.
+- Schichtuhr mit Beginn, Pause, Fortsetzen und Ende. Pausen werden von der Arbeitszeit abgezogen.
+- Monatsarbeitszeit, letzter Tagesumsatz und rechnerischer Verdienst pro Stunde.
+
+## Neu in Hany 0.7
+
+- 100 eigene, realistische Affirmationen aus zehn Themenbereichen: ein stabiler Tagesimpuls, anpassbar, mit getrenntem Lesestatus und freiwilligem bewusstem Übernehmen.
+- Morgenroutine: konkrete Dankbarkeit, persönliche Absicht, ein Zielschritt, reales Hindernis und Wenn-dann-Plan.
+- Abendroutine: tatsächliche Umsetzung, Erreichtes, Lernerfahrung, Dankbarkeit und Plan für morgen. Der Plan erscheint am nächsten Tag in der Morgenroutine.
+- Beide Routinen und gelesene Impulse bleiben im Tagesverlauf erhalten. Zukunftspläne werden nicht als erreichte Tage gezählt.
+- Kostenlos und lokal, ohne neue Konten oder Dienste. Die 100 Sätze sind eigene Anregungen; ihre individuelle Wirksamkeit ist nicht wissenschaftlich geprüft.
 
 ## Neu in Hany 0.6
 
